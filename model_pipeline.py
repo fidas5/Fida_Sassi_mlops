@@ -11,9 +11,15 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 import joblib
-def prepare_data(data_path='Churn_Modelling.csv'):
+
+def load_data(data_path='Churn_Modelling.csv'):
 
     data = pd.read_csv(data_path)
+
+    return data
+
+def prepare_data(data):
+
 
     data = data.drop(['Surname', 'Geography'], axis=1)
 
