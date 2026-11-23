@@ -1,0 +1,35 @@
+name: MLOps - Prefect CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  prefect-pipeline:
+    name: Run Prefect ML Pipeline
+
+    runs-on: [self-hosted, Linux, X64]
+
+    steps:
+      # Step 1: Retrieve the latest code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Step 2: Verify the Python environment
+      - name: Check Python environment
+        run: |
+          /home/fida/MLops_projet/venv/bin/python --version
+          /home/fida/MLops_projet/venv/bin/python -m prefect version
+
+      # Step 3: Execute Prefect pipeline
+      - name: Run Prefect Pipeline
+        env:
+          PREFECT_API_URL: http://127.0.0.1:4200/api
+        run: |
+          /home/fida/MLops_projet/venv/bin/python pipeline_prefect.py --flow all
