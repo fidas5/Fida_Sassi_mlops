@@ -6,46 +6,39 @@ from model_pipeline import (
     train_model,
     evaluate_model,
     save_model,
-    load_model
+    load_model,
 )
 
 
 def main():
 
     # Creation du parser
-    parser = argparse.ArgumentParser(
-        description="Customer Churn ML Pipeline"
-    )
+    parser = argparse.ArgumentParser(description="Customer Churn ML Pipeline")
 
     # Definition des arguments
     group = parser.add_mutually_exclusive_group(required=True)
 
-    group.add_argument("--load_data", action="store_true",
-                       help="Load the dataset")
+    group.add_argument("--load_data", action="store_true", help="Load the dataset")
 
-    group.add_argument("--prepare", action="store_true",
-                       help="Prepare the data")
+    group.add_argument("--prepare", action="store_true", help="Prepare the data")
 
-    group.add_argument("--train", action="store_true",
-                       help="Train the model")
+    group.add_argument("--train", action="store_true", help="Train the model")
 
-    group.add_argument("--evaluate", action="store_true",
-                       help="Evaluate the model")
+    group.add_argument("--evaluate", action="store_true", help="Evaluate the model")
 
-    group.add_argument("--save", action="store_true",
-                       help="Train and save the model")
+    group.add_argument("--save", action="store_true", help="Train and save the model")
 
-    group.add_argument("--load", action="store_true",
-                       help="Load the saved model")
+    group.add_argument("--load", action="store_true", help="Load the saved model")
 
-    group.add_argument("--all", action="store_true",
-                       help="Execute the complete lifecycle")
+    group.add_argument(
+        "--all", action="store_true", help="Execute the complete lifecycle"
+    )
 
     args = parser.parse_args()
 
     # Chargement des donnees
     if args.load_data:
-        data = load()
+        data = load_data()
         print(data.head())
 
     # Preparation des donnees
@@ -100,6 +93,7 @@ def main():
 
         print("\n===== COMPLETE LIFECYCLE FINISHED =====")
         print(f"Final Accuracy: {accuracy:.4f}")
+
 
 if __name__ == "__main__":
     main()
