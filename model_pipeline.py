@@ -78,3 +78,50 @@ def load_model(model_path="model.joblib"):
     print(f"Model loaded from {model_path}")
 
     return model
+
+
+def predict_data(data_path="Churn_Modelling.csv"):
+    # Charger les données à prédire
+    data = load_data(data_path)
+
+    # Conserver uniquement les variables utilisées à l'entraînement
+    features = data.drop(
+        columns=[
+            "Surname",
+            "Geography",
+            "Exited",
+            "RowNumber",
+            "CustomerId",
+        ],
+        errors="ignore",
+    ).copy()
+
+    # Reproduire l'encodage utilisé pendant l'entraînement
+    features["Gender"] = features["Gender"].map({"Female": 0, "Male": 1})
+
+    # Vérifier les valeurs manquantes ou inconnues
+    if features.isna().any().any():
+        raise ValueError("Missing or invalid values in prediction data")
+
+    if features.empty:
+        raise ValueError("No observations available for prediction")
+
+    # Charger le modèle et le scaler existants
+    model = load_model()
+    scaler = joblib.load("scaler.joblib")
+
+    # Appliquer le même scaler que pendant l'entraînement
+    features_scaled = scaler.transform(features)
+
+    # Effectuer les prédictions
+    predictions = model.predict(features_scaled)
+
+    # Construire et sauvegarder les résultats
+    results = data.copy()
+    results["Prediction"] = predictions
+
+    results.to_csv("predictions.csv", index=False)
+
+    print("Predictions saved to predictions.csv")
+
+    return results
