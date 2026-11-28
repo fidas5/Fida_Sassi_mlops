@@ -355,7 +355,7 @@ def all_flow():
     print("\n===== MODEL EVALUATION =====")
     accuracy = task_evaluate_model(model, x_test, y_test)
 
-    print("\n===== COMPLETE PIPELINE FINISHED =====")
+    print("\n===== COMPLETE PIPELINE FINISHED - GITHUB VERSION =====")
     print(f"Final Accuracy: {accuracy:.4f}")
 
     return accuracy
