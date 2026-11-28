@@ -1,5 +1,5 @@
 from prefect import flow, task
-
+import sys
 import subprocess
 import argparse
 from model_pipeline import (
@@ -75,7 +75,7 @@ def task_format_code():
 
     files = ["model_pipeline.py", "main.py", "pipeline_prefect.py"]
 
-    subprocess.run(["black", *files], check=True)
+    subprocess.run([sys.executable, "-m", "black", *files], check=True)
 
     print("Code formatted successfully.")
 
@@ -86,10 +86,16 @@ def task_check_quality():
     files = ["model_pipeline.py", "main.py", "pipeline_prefect.py"]
 
     subprocess.run(
-        ["flake8", "--max-line-length=88", "--extend-ignore=E203,W503", *files],
+        [
+            sys.executable,
+            "-m",
+            "flake8",
+            "--max-line-length=88",
+            "--extend-ignore=E203,W503",
+            *files,
+        ],
         check=True,
     )
-
     print("Code quality check passed.")
 
 
@@ -98,7 +104,17 @@ def task_check_security():
 
     files = ["model_pipeline.py", "main.py", "pipeline_prefect.py"]
 
-    subprocess.run(["bandit", "-s", "B404,B603,B607", *files], check=True)
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "bandit",
+            "-s",
+            "B404,B603,B607",
+            *files,
+        ],
+        check=True,
+    )
 
     print("Security check passed.")
 
